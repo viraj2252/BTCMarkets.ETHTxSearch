@@ -1,10 +1,15 @@
 ﻿using System;
 namespace BTCMarkets.ETHTxSearch.Infrastructure.Api.Requests
 {
-    public class EthBlockScanRequestParam
+    /// <summary>
+    /// Request param related to Eth block scan
+    /// </summary>
+    public class EthBlockScanRequestParam : QueryBodyParams
     {
-        public EthBlockScanRequestParam()
+        public EthBlockScanRequestParam(string jsonRpc, string method, object[] parameters, int id) :
+            base(jsonRpc, method, parameters, id)
         {
+
         }
     }
 }

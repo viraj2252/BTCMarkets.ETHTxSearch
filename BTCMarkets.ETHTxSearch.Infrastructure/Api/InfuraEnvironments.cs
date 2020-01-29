@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BTCMarkets.ETHTxSearch.Infrastructure.Api
 {
-    public static class Environments
+    public static class InfuraEnvironments
     {
         //No need to add this to config as we know this is the endpoint we are going to use to scan for transactions
         public static readonly IDictionary<EthEnvironment, string> Values = new Dictionary<EthEnvironment, string>
