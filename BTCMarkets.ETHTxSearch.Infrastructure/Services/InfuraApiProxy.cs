@@ -6,6 +6,7 @@ using BTCMarkets.ETHTxSearch.Core.Api;
 using BTCMarkets.ETHTxSearch.Core.Interfaces;
 using BTCMarkets.ETHTxSearch.Infrastructure.Api;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace BTCMarkets.ETHTxSearch.Infrastructure.Services
@@ -17,16 +18,16 @@ namespace BTCMarkets.ETHTxSearch.Infrastructure.Services
     public class InfuraApiProxy: IApiProxy
     {
         private readonly HttpClient _httpClient;
-        EthEnvironment _environment;
-        private readonly string _projectId;
-        private readonly ILogger _logger;
+        private readonly ILogger<InfuraApiProxy> _logger;
+        private readonly IOptions<ApiOptions> _configuration;
 
-        public InfuraApiProxy(ILogger logger, EthEnvironment environment, string projectId)
+        public InfuraApiProxy(
+            ILogger<InfuraApiProxy> logger,
+            IOptions<ApiOptions> configuration)
         {
-            _environment = environment;
-            _projectId = projectId;
             _logger = logger;
-            _httpClient = new HttpClient { BaseAddress = new Uri($"https://{InfuraEnvironments.Values[_environment]}/v3/{_projectId}") };
+            _configuration = configuration;
+            _httpClient = new HttpClient { BaseAddress = new Uri($"https://{InfuraEnvironments.Values[_configuration.Value.ApiEnvironment]}/{_configuration.Value.Version}/{_configuration.Value.ProjectId}") };
 
         }
 
@@ -42,6 +43,7 @@ namespace BTCMarkets.ETHTxSearch.Infrastructure.Services
 
         public Task<ApiResult<string>> Post(string action, IBodyParams parameters)
         {
+            _logger.LogInformation("Post request");
             return SendAndGetResponseAsync(HttpMethod.Post, action, parameters);
         }
 

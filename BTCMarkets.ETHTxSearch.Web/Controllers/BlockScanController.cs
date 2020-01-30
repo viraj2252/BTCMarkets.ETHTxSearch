@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BTCMarkets.ETHTxSearch.Core.Interfaces;
+using BTCMarkets.ETHTxSearch.Infrastructure.Api;
 using BTCMarkets.ETHTxSearch.Infrastructure.Api.Requests;
 using BTCMarkets.ETHTxSearch.Web.Dtos;
 using BTCMarkets.ETHTxSearch.Web.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,12 +22,18 @@ namespace BTCMarkets.ETHTxSearch.Web.Controllers
         private readonly IBlockDataService _blockDataService;
         private readonly ILogger<BlockScanController> _logger;
         private readonly IMapper _mapper;
+        private readonly IOptions<ApiOptions> _configuration;
 
-        public BlockScanController(ILogger<BlockScanController> logger, IBlockDataService blockDataService, IMapper mapper)
+        public BlockScanController(
+                ILogger<BlockScanController> logger,
+                IBlockDataService blockDataService,
+                IMapper mapper,
+                IOptions<ApiOptions> configuration)
         {
             _blockDataService = blockDataService;
             _logger = logger;
             _mapper = mapper;
+            _configuration = configuration;
         }
         // GET: api/values
         [HttpPost]

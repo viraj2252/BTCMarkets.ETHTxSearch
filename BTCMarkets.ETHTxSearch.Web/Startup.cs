@@ -30,7 +30,7 @@ namespace BTCMarkets.ETHTxSearch.Web
                 configuration.RootPath = "ClientApp/build";
             });
 
-            DiConfig.ConfigureServices(services);
+            DiConfig.ConfigureServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

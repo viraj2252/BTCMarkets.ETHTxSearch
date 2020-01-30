@@ -8,17 +8,22 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
 using BTCMarkets.ETHTxSearch.Infrastructure.Api;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 
 namespace BTCMarkets.ETHTxSearch.Web.Helpers
 {
     public static class DiConfig
     {
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddResponseCaching();
 
-            IConfigurationRoot configuration = GetConfiguration();
-            var serviceProvider = services.BuildServiceProvider();
+            //IConfigurationRoot configurationNew = GetConfiguration();
+            
+
+            //Register options
+            IConfigurationSection secApi = configuration.GetSection("ApiOptions");
+            services.Configure<ApiOptions>(secApi);
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -30,7 +35,8 @@ namespace BTCMarkets.ETHTxSearch.Web.Helpers
 
             services.AddTransient(typeof(ILogger<>), (typeof(Logger<>)));
 
-            services.AddTransient<IApiProxy>(s => new InfuraApiProxy(serviceProvider.GetService<ILogger<InfuraApiProxy>>(), EthEnvironment.Mainnet, "22b2ebe2940745b3835907b30e8257a4"));
+            //services.AddTransient<IApiProxy>(s => new InfuraApiProxy(serviceProvider.GetService<ILogger<InfuraApiProxy>>(), EthEnvironment.Mainnet, "22b2ebe2940745b3835907b30e8257a4"));
+            services.AddTransient<IApiProxy, InfuraApiProxy>();
             services.AddTransient<IApiService, InfuraApiService>();
             services.AddTransient<IBlockDataService, BlockDataService>();
 
